@@ -1,0 +1,280 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap');
+
+:root {
+  --yellow: #FFD84D;
+  --yellow-light: #FFF0A6;
+  --blue: #3568FF;
+  --blue-dark: #142B65;
+  --bg: #F5F7FF;
+  --white: #FFFFFF;
+  --black: #171717;
+  --muted: #6b7280;
+  --border: 3px solid var(--black);
+  --shadow-sm: 4px 4px 0 var(--black);
+  --shadow: 6px 6px 0 var(--black);
+  --shadow-lg: 10px 10px 0 var(--black);
+  --radius: 14px;
+  --radius-lg: 22px;
+  --font-head: 'Space Grotesk', system-ui, sans-serif;
+  --font-body: 'Inter', system-ui, sans-serif;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* MENGUNCI LAYAR AGAR TIDAK BISA DI-SCROLL KE KANAN/KIRI */
+html, body { 
+  overflow-x: hidden; 
+  width: 100%; 
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg);
+  color: var(--black);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4, h5, h6 { font-family: var(--font-head); font-weight: 700; letter-spacing: -0.02em; line-height: 1.15; }
+
+a { color: inherit; text-decoration: none; }
+
+button, .btn {
+  font-family: var(--font-head);
+  font-weight: 700;
+  cursor: pointer;
+  border: var(--border);
+  border-radius: var(--radius);
+  padding: 12px 22px;
+  font-size: 15px;
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: var(--white);
+  color: var(--black);
+  white-space: nowrap; /* Mencegah teks tombol turun baris */
+}
+button:hover, .btn:hover { transform: translate(-2px, -2px); box-shadow: var(--shadow); }
+button:active, .btn:active { transform: translate(2px, 2px); box-shadow: 0 0 0 var(--black); }
+
+.btn-primary { background: var(--yellow); }
+.btn-blue { background: var(--blue); color: var(--white); }
+.btn-dark { background: var(--black); color: var(--white); }
+.btn-ghost { background: var(--white); }
+
+input, textarea, select {
+  font-family: var(--font-body);
+  font-size: 15px;
+  padding: 12px 16px;
+  border: var(--border);
+  border-radius: var(--radius);
+  background: var(--white);
+  width: 100%;
+  outline: none;
+  transition: box-shadow 0.15s;
+}
+input:focus, textarea:focus, select:focus {
+  box-shadow: 4px 4px 0 var(--blue);
+  border-color: var(--blue);
+}
+
+label { font-family: var(--font-head); font-weight: 600; font-size: 14px; margin-bottom: 6px; display: block; }
+
+.container { max-width: 1200px; margin: 0 auto; padding: 0 20px; width: 100%; }
+
+/* NAVBAR */
+.navbar {
+  position: sticky; top: 0; z-index: 100;
+  background: var(--white);
+  border-bottom: var(--border);
+  padding: 14px 0;
+  width: 100%;
+}
+.navbar .container { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+
+/* PERBAIKAN LOGO: Agar teks "AYAKA REST API" tidak turun ke bawah */
+.logo { 
+  display: flex; 
+  align-items: center; 
+  gap: 10px; 
+  font-family: var(--font-head); 
+  font-weight: 700; 
+  font-size: 20px; 
+}
+.logo-badge {
+  background: var(--yellow);
+  border: var(--border);
+  border-radius: 8px;
+  padding: 6px 10px;
+  box-shadow: var(--shadow-sm);
+  font-weight: 700;
+  flex-shrink: 0; /* Mencegah badge mengecil */
+}
+.logo span { 
+  background: linear-gradient(135deg, var(--blue), var(--blue-dark)); 
+  -webkit-background-clip: text; 
+  background-clip: text; 
+  color: transparent; 
+  white-space: nowrap; /* Mencegah teks terpotong/turun */
+}
+
+.nav-links { display: flex; gap: 6px; align-items: center; }
+.nav-links a { padding: 8px 14px; border-radius: 10px; font-weight: 600; font-size: 14px; transition: background 0.15s; }
+.nav-links a:hover { background: var(--yellow-light); }
+.nav-actions { display: flex; gap: 10px; align-items: center; }
+.menu-toggle { display: none; background: var(--yellow); padding: 10px 14px; border-radius: 10px; font-size: 18px; }
+
+/* SECTIONS & CARDS */
+section { padding: 90px 0; }
+.section-title { font-size: clamp(28px, 4vw, 44px); margin-bottom: 14px; text-align: center; }
+.section-sub { text-align: center; color: var(--muted); max-width: 640px; margin: 0 auto 50px; font-size: 17px; }
+
+.card {
+  background: var(--white);
+  border: var(--border);
+  border-radius: var(--radius-lg);
+  padding: 28px;
+  box-shadow: var(--shadow);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  width: 100%;
+  overflow: hidden; /* Mencegah isi card keluar */
+}
+.card:hover { transform: translate(-3px, -3px); box-shadow: var(--shadow-lg); }
+
+.badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 6px 14px; border-radius: 999px;
+  border: 2px solid var(--black); background: var(--yellow-light);
+  font-family: var(--font-head); font-size: 12px; font-weight: 700;
+  letter-spacing: 0.06em; text-transform: uppercase;
+}
+
+/* REVEAL ANIMATIONS */
+.reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.7s ease, transform 0.7s ease; }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+  .reveal { opacity: 1; transform: none; }
+}
+
+/* FOOTER */
+footer {
+  background: var(--blue-dark);
+  color: var(--white);
+  padding: 60px 0 30px;
+  border-top: var(--border);
+  width: 100%;
+}
+footer h4 { color: var(--yellow); margin-bottom: 12px; font-size: 15px; text-transform: uppercase; letter-spacing: 0.05em; }
+footer a { color: rgba(255,255,255,0.75); font-size: 14px; display: block; padding: 4px 0; }
+footer a:hover { color: var(--yellow); }
+.footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 40px; margin-bottom: 40px; }
+.footer-brand p { color: rgba(255,255,255,0.7); max-width: 320px; font-size: 14px; margin-top: 10px; }
+.footer-bottom {
+  border-top: 1px solid rgba(255,255,255,0.2);
+  padding-top: 24px;
+  display: flex; justify-content: space-between; align-items: center;
+  flex-wrap: wrap; gap: 12px; font-size: 13px;
+}
+.powered { font-family: var(--font-head); font-weight: 700; color: var(--yellow); letter-spacing: 0.1em; font-size: 12px; }
+
+/* TOAST */
+#toast-container {
+  position: fixed; top: 20px; right: 20px; z-index: 9999;
+  display: flex; flex-direction: column; gap: 10px;
+}
+.toast {
+  background: var(--white); border: var(--border); border-radius: var(--radius);
+  padding: 14px 20px; box-shadow: var(--shadow-sm);
+  font-weight: 600; font-size: 14px; min-width: 220px;
+  animation: slideIn 0.3s ease;
+}
+.toast.success { background: var(--yellow); }
+.toast.error { background: #ffb3b3; }
+@keyframes slideIn { from { transform: translateX(120%); } to { transform: translateX(0); } }
+
+/* =========================================
+   PERBAIKAN CODE BLOCK (AGAR TIDAK MELEBAR)
+   ========================================= */
+.code-block {
+  background: #0d1117; 
+  color: #e6edf3;
+  padding: 50px 16px 16px 16px; /* Padding atas untuk tombol Copy */
+  border-radius: var(--radius);
+  border: var(--border);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px; 
+  line-height: 1.7;
+  position: relative;
+  width: 100%;
+  max-width: 100%;
+}
+.code-block pre { 
+  margin: 0; 
+  white-space: pre-wrap; /* Memaksa teks panjang turun ke bawah */
+  word-break: break-word; /* Memotong kata yang terlalu panjang */
+}
+.code-block .kw { color: #ff7b72; }
+.code-block .str { color: #a5d6ff; }
+.code-block .key { color: var(--yellow); }
+.code-copy {
+  position: absolute; 
+  top: 12px; 
+  right: 12px;
+  background: var(--yellow); 
+  color: var(--black);
+  padding: 6px 12px; 
+  font-size: 12px; 
+  border-radius: 8px;
+  border: 2px solid var(--black); 
+  cursor: pointer; 
+  font-weight: 700;
+}
+
+/* =========================================
+   RESPONSIVE MOBILE (HP & TABLET)
+   ========================================= */
+@media (max-width: 900px) {
+  /* Navbar Mobile */
+  .nav-links { 
+    display: none; 
+    position: absolute; 
+    top: 100%; 
+    left: 0; 
+    right: 0;
+    background: var(--white); 
+    border-bottom: var(--border); 
+    padding: 16px;
+    flex-direction: column; 
+    align-items: stretch;
+    z-index: 999;
+    box-shadow: 0 10px 10px rgba(0,0,0,0.1);
+  }
+  .nav-links.open { display: flex; }
+  .nav-links a { padding: 12px; text-align: center; font-size: 16px; }
+  
+  /* Sembunyikan tombol desktop di HP */
+  .nav-actions .btn { display: none; } 
+  /* Tampilkan tombol menu hamburger */
+  .menu-toggle { display: block; } 
+  
+  /* Penyesuaian Logo agar pas di HP */
+  .logo { font-size: 16px; gap: 8px; }
+  .logo-badge { padding: 4px 8px; font-size: 14px; }
+
+  /* Section & Layout */
+  section { padding: 50px 0; }
+  .hero .container { grid-template-columns: 1fr; gap: 30px; text-align: center; }
+  .hero-actions { justify-content: center; }
+  .features-grid { grid-template-columns: 1fr; }
+  .steps { grid-template-columns: 1fr; }
+  .api-grid { grid-template-columns: 1fr; }
+  .footer-grid { grid-template-columns: 1fr; gap: 30px; text-align: center; }
+  .footer-brand p { margin: 10px auto 0; }
+  .float2, .float3 { margin-left: 0; }
+}

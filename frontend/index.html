@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>AYAKA REST API — One API. Unlimited Possibilities.</title>
+<meta name="description" content="Powerful API infrastructure designed for developers. Manage your API keys, explore endpoints, and build something extraordinary.">
+<link rel="stylesheet" href="css/style.css">
+<style>
+  /* CSS KHUSUS HALAMAN INI */
+  .hero { padding: 100px 0 60px; position: relative; overflow: hidden; }
+  .hero .container { display: grid; grid-template-columns: 1.1fr 1fr; gap: 60px; align-items: center; }
+  .hero h1 { font-size: clamp(38px, 6vw, 68px); margin: 20px 0; }
+  .hero h1 .highlight { color: var(--blue); }
+  .hero p { font-size: 18px; color: var(--muted); max-width: 540px; margin-bottom: 30px; }
+  .hero-actions { display: flex; gap: 14px; flex-wrap: wrap; }
+  .hero-visual { position: relative; }
+  .floating-card {
+    background: var(--white); border: var(--border); border-radius: var(--radius-lg);
+    padding: 22px; box-shadow: var(--shadow-lg); font-family: var(--font-head);
+  }
+  .floating-card.dark { background: var(--blue-dark); color: var(--white); }
+  .floating-card.dark code { color: var(--yellow); }
+  .floating-card + .floating-card { margin-top: 16px; }
+  .float1 { animation: float 4s ease-in-out infinite; }
+  .float2 { animation: float 5s ease-in-out infinite reverse; margin-left: 40px; }
+  .float3 { animation: float 6s ease-in-out infinite; margin-left: 20px; }
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-12px); }
+  }
+  .features-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 22px; }
+  .feature-icon {
+    width: 52px; height: 52px; border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 24px; border: var(--border); margin-bottom: 16px;
+  }
+  .feature-card h3 { margin-bottom: 8px; font-size: 18px; }
+  .feature-card p { color: var(--muted); font-size: 14px; }
+  .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+  .step-num {
+    font-family: var(--font-head); font-size: 56px; font-weight: 700;
+    color: var(--blue); line-height: 1; margin-bottom: 12px;
+  }
+  .api-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: start; }
+  .faq-item {
+    border: var(--border); border-radius: var(--radius);
+    background: var(--white); margin-bottom: 14px; overflow: hidden;
+  }
+  .faq-q {
+    padding: 20px; cursor: pointer; font-family: var(--font-head); font-weight: 700;
+    display: flex; justify-content: space-between; align-items: center;
+    background: var(--white); transition: background 0.15s;
+  }
+  .faq-q:hover { background: var(--yellow-light); }
+  .faq-a { padding: 0 20px 20px; color: var(--muted); display: none; }
+  .faq-item.open .faq-a { display: block; }
+  .faq-item.open .faq-q { background: var(--yellow-light); }
+
+  /* Tombol di dalam menu mobile */
+  .mobile-only-btn {
+    display: none;
+    margin-top: 10px;
+    background: var(--yellow);
+    color: var(--black);
+    font-weight: bold;
+    border: var(--border);
+    border-radius: 10px;
+  }
+
+  @media (max-width: 900px) {
+    .hero { padding: 60px 0 40px; }
+    .hero .container { display: flex; flex-direction: column; text-align: center; }
+    .hero-actions { justify-content: center; }
+    .hero-visual { width: 100%; margin-top: 30px; }
+    .float2, .float3 { margin-left: 0; }
+    .features-grid { grid-template-columns: 1fr 1fr; }
+    .steps { grid-template-columns: 1fr; }
+    .api-grid { grid-template-columns: 1fr; }
+    .mobile-only-btn { display: block; }
+  }
+  @media (max-width: 550px) {
+    .features-grid { grid-template-columns: 1fr; }
+    .hero h1 { font-size: 32px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <div class="container">
+    <a href="/" class="logo">
+      <div class="logo-badge">AY</div>
+      <span>AYAKA REST API</span>
+    </a>
+    <div class="nav-links" id="navLinks">
+      <a href="#home">Home</a>
+      <a href="#features">Features</a>
+      <a href="documentation.html">Documentation</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#about">About</a>
+      <!-- Tombol ini hanya muncul saat menu hamburger dibuka di HP -->
+      <a href="login.html" class="mobile-only-btn">Login</a>
+      <a href="register.html" class="mobile-only-btn" style="background:var(--blue); color:white;">Get Started</a>
+    </div>
+    <div class="nav-actions">
+      <a href="login.html" class="btn btn-ghost">Login</a>
+      <a href="register.html" class="btn btn-primary">Get Started</a>
+      <button class="menu-toggle" id="menuToggle">☰</button>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="container">
+    <div>
+      <span class="badge">✦ NEXT GENERATION API PLATFORM</span>
+      <h1 class="reveal">Build Faster.<br><span class="highlight">Connect Smarter.</span></h1>
+      <p class="reveal">Discover a powerful API platform built for developers. Generate your own API keys, manage requests, and integrate powerful endpoints with ease.</p>
+      <div class="hero-actions reveal">
+        <a href="register.html" class="btn btn-primary">Get Started →</a>
+        <a href="documentation.html" class="btn btn-ghost">Explore Documentation</a>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="floating-card dark float1">
+        <div style="font-size:12px;opacity:0.7;margin-bottom:8px;">GET /api/v1/example</div>
+        <code>X-API-Key: ayaka_live_••••••</code>
+      </div>
+      <div class="floating-card float2" style="background:var(--yellow);">
+        <div style="font-size:12px;font-weight:600;margin-bottom:8px;">✦ RESPONSE 200 OK</div>
+        <code style="font-size:12px;">{"success": true, "creator": "Ayaka"}</code>
+      </div>
+      <div class="floating-card float3">
+        <div style="font-size:12px;color:var(--muted);margin-bottom:8px;">ACTIVE KEYS</div>
+        <div style="font-size:32px;font-weight:700;">04</div>
+        <div style="font-size:12px;color:var(--muted);">12,847 requests today</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section id="features" style="background:var(--white);border-top:var(--border);border-bottom:var(--border);">
+  <div class="container">
+    <h2 class="section-title reveal">Everything You Need to Ship</h2>
+    <p class="section-sub reveal">A complete developer toolkit engineered for scale, security, and speed.</p>
+    <div class="features-grid">
+      <div class="card feature-card reveal">
+        <div class="feature-icon" style="background:var(--yellow);">🔑</div>
+        <h3>Personal API Key</h3>
+        <p>Generate secure keys bound to your account with one click.</p>
+      </div>
+      <div class="card feature-card reveal">
+        <div class="feature-icon" style="background:var(--blue);color:white;">🛡</div>
+        <h3>Secure Authentication</h3>
+        <p>Argon2 hashing, HTTP-only sessions, CSRF protection out of the box.</p>
+      </div>
+      <div class="card feature-card reveal">
+        <div class="feature-icon" style="background:var(--yellow-light);">📊</div>
+        <h3>Real-Time Dashboard</h3>
+        <p>Track usage, response times, and endpoint trends live.</p>
+      </div>
+      <div class="card feature-card reveal">
+        <div class="feature-icon" style="background:var(--blue-dark);color:white;">📖</div>
+        <h3>API Documentation</h3>
+        <p>Interactive docs with examples you can copy instantly.</p>
+      </div>
+      <div class="card feature-card reveal">
+        <div class="feature-icon" style="background:var(--yellow);">📈</div>
+        <h3>Request Analytics</h3>
+        <p>Daily, weekly, and monthly breakdowns with charts.</p>
+      </div>
+      <div class="card feature-card reveal">
+        <div class="feature-icon" style="background:var(--blue);color:white;">⏱</div>
+        <h3>Rate Limiting</h3>
+        <p>Per-key rate limits protect your infrastructure automatically.</p>
+      </div>
+      <div class="card feature-card reveal">
+        <div class="feature-icon" style="background:var(--yellow-light);">🗝</div>
+        <h3>API Key Management</h3>
+        <p>Create, rename, revoke, and rotate keys — all tracked.</p>
+      </div>
+      <div class="card feature-card reveal">
+        <div class="feature-icon" style="background:var(--blue-dark);color:white;">⚡</div>
+        <h3>Developer Friendly</h3>
+        <p>RESTful JSON API, clean errors, typed responses.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section>
+  <div class="container">
+    <h2 class="section-title reveal">Ship in 3 Steps</h2>
+    <p class="section-sub reveal">From signup to first request in under two minutes.</p>
+    <div class="steps">
+      <div class="card reveal">
+        <div class="step-num">01</div>
+        <h3>Create Account</h3>
+        <p style="color:var(--muted);margin-top:10px;">Sign up free. Verify email. You're in.</p>
+      </div>
+      <div class="card reveal">
+        <div class="step-num">02</div>
+        <h3>Generate API Key</h3>
+        <p style="color:var(--muted);margin-top:10px;">Open dashboard → My API Keys → Generate. Copy once.</p>
+      </div>
+      <div class="card reveal">
+        <div class="step-num">03</div>
+        <h3>Start Building</h3>
+        <p style="color:var(--muted);margin-top:10px;">Send requests with X-API-Key header. Monitor usage live.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- API PREVIEW / PRICING -->
+<section id="pricing" style="background:var(--yellow-light);border-top:var(--border);border-bottom:var(--border);">
+  <div class="container">
+    <h2 class="section-title reveal">Simple Pricing. Free Forever.</h2>
+    <p class="section-sub reveal">60 requests/minute per key. Unlimited keys (up to 10 active). No credit card.</p>
+    <div class="api-grid">
+      <div class="card reveal">
+        <h3 style="margin-bottom:12px;">Request Example</h3>
+        <div class="code-block">
+          <button class="code-copy" data-copy="curl -X GET 'https://your-domain.vercel.app/api/v1/example' -H 'X-API-Key: YOUR_API_KEY'">Copy</button>
+          <pre><span class="kw">GET</span> /api/v1/example
+
+<span class="key">Headers:</span>
+X-API-Key: YOUR_API_KEY</pre>
+        </div>
+      </div>
+      <div class="card reveal">
+        <h3 style="margin-bottom:12px;">Success Response</h3>
+        <div class="code-block">
+          <button class="code-copy" data-copy='{"success":true,"creator":"Ayaka REST API","message":"API connected successfully","data":{"status":"online"}}'>Copy</button>
+          <pre>{
+  <span class="key">"success"</span>: <span class="kw">true</span>,
+  <span class="key">"creator"</span>: <span class="str">"Ayaka REST API"</span>,
+  <span class="key">"message"</span>: <span class="str">"API connected successfully"</span>,
+  <span class="key">"data"</span>: {
+    <span class="key">"status"</span>: <span class="str">"online"</span>
+  }
+}</pre>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="about">
+  <div class="container" style="max-width:820px;">
+    <h2 class="section-title reveal">Frequently Asked</h2>
+    <p class="section-sub reveal">Quick answers to common questions.</p>
+    <div class="reveal">
+      <div class="faq-item">
+        <div class="faq-q">What is AYAKA REST API? <span>+</span></div>
+        <div class="faq-a">A developer platform for generating and managing personal API keys that access our REST endpoints securely.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">How do I get an API Key? <span>+</span></div>
+        <div class="faq-a">Create a free account, open your dashboard, go to "My API Keys" and click "Generate API Key".</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">Is the API free? <span>+</span></div>
+        <div class="faq-a">Yes. Free forever with 60 requests/minute per key. No credit card required.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">How do I use the API? <span>+</span></div>
+        <div class="faq-a">Send an HTTP request to any endpoint with the header <code>X-API-Key: YOUR_API_KEY</code>. See our documentation for full details.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">Can I generate multiple API Keys? <span>+</span></div>
+        <div class="faq-a">Yes. You can have up to 10 active keys at any time — perfect for separate projects or environments.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">Is my API Key secure? <span>+</span></div>
+        <div class="faq-a">Your key is hashed (SHA-256) in our database. We never store plaintext keys. The full key is shown exactly once at creation — save it then.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo" style="color:var(--white);">
+          <div class="logo-badge">AY</div>
+          <span style="color:var(--yellow); -webkit-text-fill-color: var(--yellow);">AYAKA REST API</span>
+        </div>
+        <p>Powerful API infrastructure designed for developers. One API. Unlimited Possibilities.</p>
+      </div>
+      <div>
+        <h4>Quick Links</h4>
+        <a href="#home">Home</a>
+        <a href="#features">Features</a>
+        <a href="#pricing">Pricing</a>
+        <a href="#about">About</a>
+      </div>
+      <div>
+        <h4>Documentation</h4>
+        <a href="documentation.html">Getting Started</a>
+        <a href="documentation.html#auth">Authentication</a>
+        <a href="documentation.html#endpoints">Endpoints</a>
+        <a href="documentation.html#errors">Error Codes</a>
+      </div>
+      <div>
+        <h4>Contact</h4>
+        <a href="mailto:hello@ayaka.dev">hello@ayaka.dev</a>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="login.html">Sign In</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 AYAKA REST API. All Rights Reserved.</span>
+      <span class="powered">⚡ POWERED BY AYAKA SYNC</span>
+    </div>
+  </div>
+</footer>
+
+<div id="toast-container"></div>
+<script src="js/app.js"></script>
+<script>
+  // Mobile nav toggle
+  document.getElementById('menuToggle').addEventListener('click', () => {
+    document.getElementById('navLinks').classList.toggle('open');
+  });
+
+  // FAQ toggle
+  document.querySelectorAll('.faq-q').forEach(q => {
+    q.addEventListener('click', () => q.parentElement.classList.toggle('open'));
+  });
+
+  // Copy buttons
+  document.querySelectorAll('.code-copy').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      await navigator.clipboard.writeText(btn.dataset.copy);
+      showToast('Copied to clipboard', 'success');
+    });
+  });
+</script>
+</body>
+</html>

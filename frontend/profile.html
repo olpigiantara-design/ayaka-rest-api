@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Profile — AYAKA REST API</title>
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body>
+<div class="dash-wrap">
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">
+      <div class="logo-badge">AY</div>
+      <div><div style="font-weight:700;font-size:14px;">AYAKA REST API</div><span class="status-online">ONLINE</span></div>
+    </div>
+    <h2>Overview</h2>
+    <a href="dashboard.html">📊 Dashboard</a>
+    <a href="analytics.html">📈 Analytics</a>
+    <h2>Account</h2>
+    <a href="profile.html" class="active">👤 Profile</a>
+    <a href="#settings" data-scroll="settings">⚙ Settings</a>
+    <a href="#security" data-scroll="security">🔒 Security</a>
+    <a href="#" id="logoutLink">🚪 Logout</a>
+  </aside>
+
+  <main class="main-content">
+    <div class="topbar">
+      <div style="display:flex;align-items:center;gap:14px;">
+        <button class="sidebar-toggle" id="sidebarToggle">☰</button>
+        <div class="breadcrumb">Dashboard <span>/ Profile</span></div>
+      </div>
+      <div class="topbar-actions">
+        <div class="profile-menu" id="profileMenu">
+          <div class="avatar" id="avatarBtn">?</div>
+          <div class="profile-dropdown">
+            <a href="profile.html">My Profile</a>
+            <a href="#" id="logoutDropdown">Logout</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <h1 style="font-size:26px;margin-bottom:24px;">Profile</h1>
+
+    <div class="panel">
+      <div style="display:flex;gap:20px;align-items:center;margin-bottom:20px;">
+        <div class="avatar" style="width:72px;height:72px;font-size:28px;" id="bigAvatar">?</div>
+        <div>
+          <div style="font-size:22px;font-weight:700;" id="pName">—</div>
+          <div style="color:var(--muted);" id="pUsername">@—</div>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;font-size:14px;">
+        <div><div style="color:var(--muted);font-size:12px;">EMAIL</div><div id="pEmail" style="font-weight:600;">—</div></div>
+        <div><div style="color:var(--muted);font-size:12px;">ACCOUNT CREATED</div><div id="pCreated" style="font-weight:600;">—</div></div>
+        <div><div style="color:var(--muted);font-size:12px;">USER ID</div><div id="pId" style="font-weight:600;font-family:monospace;font-size:12px;word-break:break-all;">—</div></div>
+      </div>
+    </div>
+
+    <div class="panel" id="settings">
+      <h3>Edit Profile</h3>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
+        <div><label>Full Name</label><input type="text" id="editFullName"></div>
+        <div><label>Username</label><input type="text" id="editUsername"></div>
+      </div>
+      <button class="btn btn-primary" id="saveProfile">Save Changes</button>
+    </div>
+
+    <div class="panel">
+      <h3>Change Password</h3>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:16px;">
+        <div><label>Current Password</label><input type="password" id="curPass"></div>
+        <div><label>New Password</label><input type="password" id="newPass" minlength="8"></div>
+        <div><label>Confirm New</label><input type="password" id="newPass2" minlength="8"></div>
+      </div>
+      <button class="btn btn-blue" id="changePass">Update Password</button>
+    </div>
+
+    <div class="panel" id="security">
+      <h3>Security</h3>
+      <div id="sessionsList" style="margin-bottom:16px;"></div>
+      <button class="btn btn-ghost" id="logoutAll">Logout All Sessions</button>
+    </div>
+
+    <div class="panel" style="border-color:red;">
+      <h3 style="color:red;">Danger Zone</h3>
+      <p style="color:var(--muted);margin-bottom:12px;">Permanently delete your account and all API keys.</p>
+      <button class="btn" style="background:red;color:white;" id="deleteAccount">Delete My Account</button>
+    </div>
+  </main>
+</div>
+<div id="toast-container"></div>
+<script src="js/app.js"></script>
+<script>
+let me = null;
+
+async function init() {
+  const r = await fetch('/api/auth/me', { credentials: 'include' });
+  if (!r.ok) return window.location.href = 'login.html';
+  const { user } = await r.json();
+  me = user;
+  document.getElementById('avatarBtn').textContent = (user.full_name || 'U')[0].toUpperCase();
+  document.getElementById('bigAvatar').textContent = (user.full_name || 'U')[0].toUpperCase();
+  document.getElementById('pName').textContent = user.full_name;
+  document.getElementById('pUsername').textContent = '@' + user.username;
+  document.getElementById('pEmail').textContent = user.email;
+  document.getElementById('pCreated').textContent = new Date(user.created_at).toLocaleDateString();
+  document.getElementById('pId').textContent = user.id;
+  document.getElementById('editFullName').value = user.full_name;
+  document.getElementById('editUsername').value = user.username;
+  loadSessions();
+}
+
+async function loadSessions() {
+  try {
+    const { sessions } = await API.request('/api/user/sessions');
+    document.getElementById('sessionsList').innerHTML = sessions.map(s => `
+      <div style="padding:10px 0;border-bottom:1px solid #eee;font-size:13px;">
+        <strong>Session</strong> — created ${new Date(s.created_at).toLocaleString()}
+        <div style="color:var(--muted);font-size:11px;">Expires: ${new Date(s.expires_at).toLocaleString()}</div>
+      </div>`).join('') || '<p style="color:var(--muted);">No sessions</p>';
+  } catch {}
+}
+
+document.getElementById('saveProfile')?.addEventListener('click', async () => {
+  try {
+    await API.request('/api/user/profile', {
+      method: 'PUT',
+      body: JSON.stringify({
+        full_name: document.getElementById('editFullName').value.trim(),
+        username: document.getElementById('editUsername').value.trim(),
+      }),
+    });
+    showToast('Profile updated', 'success');
+    setTimeout(() => location.reload(), 600);
+  } catch (e) { showToast(e.detail || 'Failed', 'error'); }
+});
+
+document.getElementById('changePass')?.addEventListener('click', async () => {
+  const a = document.getElementById('newPass').value;
+  const b = document.getElementById('newPass2').value;
+  if (a !== b) return showToast('Passwords do not match', 'error');
+  try {
+    await API.request('/api/user/password', {
+      method: 'PUT',
+      body: JSON.stringify({ current_password: document.getElementById('curPass').value, new_password: a }),
+    });
+    showToast('Password updated', 'success');
+    ['curPass', 'newPass', 'newPass2'].forEach(id => document.getElementById(id).value = '');
+  } catch (e) { showToast(e.detail || 'Failed', 'error'); }
+});
+
+document.getElementById('logoutAll')?.addEventListener('click', async () => {
+  if (!confirm('Log out ALL sessions? You will be redirected to login.')) return;
+  try {
+    await API.request('/api/user/sessions/logout-all', { method: 'POST' });
+    window.location.href = 'login.html';
+  } catch (e) { showToast(e.detail || 'Failed', 'error'); }
+});
+
+document.getElementById('deleteAccount')?.addEventListener('click', async () => {
+  if (!confirm('DELETE account? This cannot be undone. All API keys will be revoked.')) return;
+  try {
+    await API.request('/api/user/account', { method: 'DELETE' });
+    window.location.href = 'login.html';
+  } catch (e) { showToast(e.detail || 'Failed', 'error'); }
+});
+
+document.getElementById('sidebarToggle')?.addEventListener('click', () => document.getElementById('sidebar').classList.toggle('open'));
+document.getElementById('profileMenu')?.addEventListener('click', (e) => e.currentTarget.classList.toggle('open'));
+document.getElementById('logoutLink')?.addEventListener('click', async (e) => {
+  e.preventDefault();
+  await API.request('/api/auth/logout', { method: 'POST' });
+  window.location.href = 'login.html';
+});
+document.getElementById('logoutDropdown')?.addEventListener('click', async (e) => {
+  e.preventDefault();
+  await API.request('/api/auth/logout', { method: 'POST' });
+  window.location.href = 'login.html';
+});
+document.querySelectorAll('[data-scroll]').forEach(a => {
+  a.addEventListener('click', (e) => {
+    e.preventDefault();
+    document.getElementById(a.dataset.scroll)?.scrollIntoView({ behavior: 'smooth' });
+  });
+});
+
+init();
+</script>
+</body>
+</html>
