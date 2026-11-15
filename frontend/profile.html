@@ -4,9 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Profile — AYAKA REST API</title>
-<!-- GARIS MIRING ( / ) DITAMBAHKAN -->
-<link rel="stylesheet" href="/css/style.css?v=10">
-<link rel="stylesheet" href="/css/dashboard.css?v=10">
+<!-- TANPA GARIS MIRING -->
+<link rel="stylesheet" href="css/style.css?v=11">
+<link rel="stylesheet" href="css/dashboard.css?v=11">
 </head>
 <body>
 <div class="dash-wrap">
@@ -21,15 +21,15 @@
       <div><div style="font-weight:700;font-size:14px;">AYAKA REST API</div><span class="status-online">ONLINE</span></div>
     </div>
     <h2>Overview</h2>
-    <a href="/dashboard.html">📊 Dashboard</a>
-    <a href="/analytics.html">📈 Analytics</a>
+    <a href="dashboard.html">📊 Dashboard</a>
+    <a href="analytics.html">📈 Analytics</a>
     <h2>API Management</h2>
-    <a href="/dashboard.html#keys">🔑 My API Keys</a>
-    <a href="/dashboard.html#playground">🧪 Playground</a>
+    <a href="dashboard.html#keys">🔑 My API Keys</a>
+    <a href="dashboard.html#playground">🧪 Playground</a>
     <h2>Developer</h2>
-    <a href="/documentation.html">📖 Documentation</a>
+    <a href="documentation.html">📖 Documentation</a>
     <h2>Account</h2>
-    <a href="/profile.html" class="active">👤 Profile</a>
+    <a href="profile.html" class="active">👤 Profile</a>
     <a href="#" id="logoutLink">🚪 Logout</a>
   </aside>
 
@@ -44,7 +44,7 @@
         <div class="profile-menu" id="profileMenu">
           <div class="avatar" id="avatarBtn">?</div>
           <div class="profile-dropdown">
-            <a href="/profile.html">My Profile</a>
+            <a href="profile.html">My Profile</a>
             <a href="#" id="logoutDropdown">Logout</a>
           </div>
         </div>
@@ -131,17 +131,18 @@
 </div>
 
 <div id="toast-container"></div>
-<script src="/js/app.js?v=10"></script>
+<!-- TANPA GARIS MIRING -->
+<script src="js/app.js?v=11"></script>
 <script>
 document.addEventListener('DOMContentLoaded', () => {
   async function init() {
     try {
       const r = await fetch('/api/auth/me', { credentials: 'include' });
-      if (!r.ok) return window.location.href = '/login.html';
+      if (!r.ok) return window.location.href = 'login.html';
       
       const data = await r.json();
       const user = data.user;
-      if (!user) return window.location.href = '/login.html';
+      if (!user) return window.location.href = 'login.html';
       
       const initial = (user.full_name || 'U')[0].toUpperCase();
       
@@ -164,7 +165,7 @@ document.addEventListener('DOMContentLoaded', () => {
       loadSessions();
     } catch (err) {
       console.error(err);
-      window.location.href = '/login.html';
+      window.location.href = 'login.html';
     }
   }
 
@@ -241,7 +242,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!confirm('This will log you out from ALL devices. Continue?')) return;
     try {
       await API.request('/api/user/sessions/logout-all', { method: 'POST' });
-      window.location.href = '/login.html';
+      window.location.href = 'login.html';
     } catch (err) {
       showToast(err.detail || 'Failed to logout all sessions', 'error');
     }
@@ -253,7 +254,7 @@ document.addEventListener('DOMContentLoaded', () => {
     try {
       await API.request('/api/user/account', { method: 'DELETE' });
       showToast('Account deleted. Goodbye!', 'success');
-      setTimeout(() => window.location.href = '/login.html', 1500);
+      setTimeout(() => window.location.href = 'login.html', 1500);
     } catch (err) {
       showToast(err.detail || 'Failed to delete account', 'error');
     }
@@ -288,7 +289,7 @@ document.addEventListener('DOMContentLoaded', () => {
     e.preventDefault();
     try { await API.request('/api/auth/logout', { method: 'POST' }); } 
     catch (err) { console.error(err); } 
-    finally { window.location.href = '/login.html'; }
+    finally { window.location.href = 'login.html'; }
   };
   document.getElementById('logoutLink')?.addEventListener('click', handleLogout);
   document.getElementById('logoutDropdown')?.addEventListener('click', handleLogout);
