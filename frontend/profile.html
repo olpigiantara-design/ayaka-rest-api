@@ -4,9 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Profile — AYAKA REST API</title>
-<!-- TAMBAHAN ?v=3 UNTUK MEMAKSA BROWSER MEMUAT CSS BARU -->
-<link rel="stylesheet" href="css/style.css?v=3">
-<link rel="stylesheet" href="css/dashboard.css?v=3">
+<!-- GARIS MIRING ( / ) DITAMBAHKAN -->
+<link rel="stylesheet" href="/css/style.css?v=10">
+<link rel="stylesheet" href="/css/dashboard.css?v=10">
 </head>
 <body>
 <div class="dash-wrap">
@@ -21,21 +21,20 @@
       <div><div style="font-weight:700;font-size:14px;">AYAKA REST API</div><span class="status-online">ONLINE</span></div>
     </div>
     <h2>Overview</h2>
-    <a href="dashboard.html">📊 Dashboard</a>
-    <a href="analytics.html">📈 Analytics</a>
+    <a href="/dashboard.html">📊 Dashboard</a>
+    <a href="/analytics.html">📈 Analytics</a>
     <h2>API Management</h2>
-    <a href="dashboard.html#keys">🔑 My API Keys</a>
-    <a href="dashboard.html#playground">🧪 Playground</a>
+    <a href="/dashboard.html#keys">🔑 My API Keys</a>
+    <a href="/dashboard.html#playground">🧪 Playground</a>
     <h2>Developer</h2>
-    <a href="documentation.html">📖 Documentation</a>
+    <a href="/documentation.html">📖 Documentation</a>
     <h2>Account</h2>
-    <a href="profile.html" class="active">👤 Profile</a>
+    <a href="/profile.html" class="active">👤 Profile</a>
     <a href="#" id="logoutLink">🚪 Logout</a>
   </aside>
 
   <!-- MAIN CONTENT -->
   <main class="main-content">
-    <!-- TOPBAR -->
     <div class="topbar">
       <div style="display:flex;align-items:center;gap:14px;">
         <button class="sidebar-toggle" id="sidebarToggle">☰</button>
@@ -45,7 +44,7 @@
         <div class="profile-menu" id="profileMenu">
           <div class="avatar" id="avatarBtn">?</div>
           <div class="profile-dropdown">
-            <a href="profile.html">My Profile</a>
+            <a href="/profile.html">My Profile</a>
             <a href="#" id="logoutDropdown">Logout</a>
           </div>
         </div>
@@ -132,31 +131,20 @@
 </div>
 
 <div id="toast-container"></div>
-<!-- TAMBAHAN ?v=3 UNTUK JS -->
-<script src="js/app.js?v=3"></script>
+<script src="/js/app.js?v=10"></script>
 <script>
-// Bungkus semuanya di DOMContentLoaded agar aman
 document.addEventListener('DOMContentLoaded', () => {
-  
-  // 1. INISIALISASI DATA
   async function init() {
     try {
       const r = await fetch('/api/auth/me', { credentials: 'include' });
-      if (!r.ok) return window.location.href = 'login.html';
+      if (!r.ok) return window.location.href = '/login.html';
       
       const data = await r.json();
       const user = data.user;
+      if (!user) return window.location.href = '/login.html';
       
-      // Cek jika user kosong
-      if (!user) {
-        console.error("User data is empty", data);
-        return window.location.href = 'login.html';
-      }
-      
-      // Set Data ke UI
       const initial = (user.full_name || 'U')[0].toUpperCase();
       
-      // Gunakan optional chaining (?.) agar tidak crash jika elemen tidak ketemu
       if (document.getElementById('avatarBtn')) document.getElementById('avatarBtn').textContent = initial;
       if (document.getElementById('bigAvatar')) document.getElementById('bigAvatar').textContent = initial;
       if (document.getElementById('pName')) document.getElementById('pName').textContent = user.full_name || 'No Name';
@@ -170,20 +158,16 @@ document.addEventListener('DOMContentLoaded', () => {
       
       if (document.getElementById('pId')) document.getElementById('pId').textContent = user.id || 'Unknown';
       
-      // Isi Form
       if (document.getElementById('editFullName')) document.getElementById('editFullName').value = user.full_name || '';
       if (document.getElementById('editUsername')) document.getElementById('editUsername').value = user.username || '';
       
-      // Load Sesi Login
       loadSessions();
-      
     } catch (err) {
-      console.error("Init error:", err);
-      showToast("Gagal memuat profil. Coba refresh halaman.", "error");
+      console.error(err);
+      window.location.href = '/login.html';
     }
   }
 
-  // 2. LOAD SESSIONS
   async function loadSessions() {
     try {
       const { sessions } = await API.request('/api/user/sessions');
@@ -204,14 +188,12 @@ document.addEventListener('DOMContentLoaded', () => {
           </div>
         </div>
       `).join('');
-    } catch (e) { console.error("Sessions error:", e); }
+    } catch (e) { console.error(e); }
   }
 
-  // 3. AKSI: EDIT PROFILE
   document.getElementById('saveProfile')?.addEventListener('click', async () => {
     const btn = document.getElementById('saveProfile');
     btn.disabled = true; btn.textContent = 'Saving...';
-    
     try {
       await API.request('/api/user/profile', {
         method: 'PUT',
@@ -228,7 +210,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // 4. AKSI: GANTI PASSWORD
   document.getElementById('changePass')?.addEventListener('click', async () => {
     const curPass = document.getElementById('curPass').value;
     const newPass = document.getElementById('newPass').value;
@@ -240,7 +221,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const btn = document.getElementById('changePass');
     btn.disabled = true; btn.textContent = 'Updating...';
-    
     try {
       await API.request('/api/user/password', {
         method: 'PUT',
@@ -257,32 +237,28 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // 5. AKSI: LOGOUT SEMUA SESI
   document.getElementById('logoutAll')?.addEventListener('click', async () => {
     if (!confirm('This will log you out from ALL devices. Continue?')) return;
     try {
       await API.request('/api/user/sessions/logout-all', { method: 'POST' });
-      window.location.href = 'login.html';
+      window.location.href = '/login.html';
     } catch (err) {
       showToast(err.detail || 'Failed to logout all sessions', 'error');
     }
   });
 
-  // 6. AKSI: HAPUS AKUN
   document.getElementById('deleteAccount')?.addEventListener('click', async () => {
     const konfirmasi = prompt('Type "DELETE" to permanently delete your account and all API keys:');
     if (konfirmasi !== 'DELETE') return showToast('Account deletion cancelled', 'error');
-    
     try {
       await API.request('/api/user/account', { method: 'DELETE' });
       showToast('Account deleted. Goodbye!', 'success');
-      setTimeout(() => window.location.href = 'login.html', 1500);
+      setTimeout(() => window.location.href = '/login.html', 1500);
     } catch (err) {
       showToast(err.detail || 'Failed to delete account', 'error');
     }
   });
 
-  // 7. UI LOGIC (SIDEBAR, DROPDOWN, LOGOUT)
   const sidebar = document.getElementById('sidebar');
   const sidebarToggle = document.getElementById('sidebarToggle');
   const sidebarOverlay = document.getElementById('sidebarOverlay');
@@ -312,12 +288,11 @@ document.addEventListener('DOMContentLoaded', () => {
     e.preventDefault();
     try { await API.request('/api/auth/logout', { method: 'POST' }); } 
     catch (err) { console.error(err); } 
-    finally { window.location.href = 'login.html'; }
+    finally { window.location.href = '/login.html'; }
   };
   document.getElementById('logoutLink')?.addEventListener('click', handleLogout);
   document.getElementById('logoutDropdown')?.addEventListener('click', handleLogout);
 
-  // Jalankan init
   init();
 });
 </script>
