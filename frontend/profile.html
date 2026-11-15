@@ -2,13 +2,18 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Profile — AYAKA REST API</title>
 <link rel="stylesheet" href="css/style.css">
 <link rel="stylesheet" href="css/dashboard.css">
 </head>
 <body>
 <div class="dash-wrap">
+  
+  <!-- Overlay untuk HP (klik luar untuk menutup sidebar) -->
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+  <!-- SIDEBAR -->
   <aside class="sidebar" id="sidebar">
     <div class="brand">
       <div class="logo-badge">AY</div>
@@ -17,14 +22,19 @@
     <h2>Overview</h2>
     <a href="dashboard.html">📊 Dashboard</a>
     <a href="analytics.html">📈 Analytics</a>
+    <h2>API Management</h2>
+    <a href="dashboard.html#keys">🔑 My API Keys</a>
+    <a href="dashboard.html#playground">🧪 Playground</a>
+    <h2>Developer</h2>
+    <a href="documentation.html">📖 Documentation</a>
     <h2>Account</h2>
     <a href="profile.html" class="active">👤 Profile</a>
-    <a href="#settings" data-scroll="settings">⚙ Settings</a>
-    <a href="#security" data-scroll="security">🔒 Security</a>
     <a href="#" id="logoutLink">🚪 Logout</a>
   </aside>
 
+  <!-- MAIN CONTENT -->
   <main class="main-content">
+    <!-- TOPBAR -->
     <div class="topbar">
       <div style="display:flex;align-items:center;gap:14px;">
         <button class="sidebar-toggle" id="sidebarToggle">☰</button>
@@ -41,151 +51,265 @@
       </div>
     </div>
 
-    <h1 style="font-size:26px;margin-bottom:24px;">Profile</h1>
+    <h1 style="font-size:26px;margin-bottom:24px;">Profile & Settings</h1>
 
+    <!-- INFO PROFIL -->
     <div class="panel">
-      <div style="display:flex;gap:20px;align-items:center;margin-bottom:20px;">
-        <div class="avatar" style="width:72px;height:72px;font-size:28px;" id="bigAvatar">?</div>
+      <div style="display:flex;gap:20px;align-items:center;margin-bottom:24px;flex-wrap:wrap;">
+        <div class="avatar" style="width:80px;height:80px;font-size:32px;" id="bigAvatar">?</div>
         <div>
-          <div style="font-size:22px;font-weight:700;" id="pName">—</div>
-          <div style="color:var(--muted);" id="pUsername">@—</div>
+          <div style="font-size:24px;font-weight:700;font-family:var(--font-head);" id="pName">—</div>
+          <div style="color:var(--muted);font-size:15px;" id="pUsername">@—</div>
         </div>
       </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;font-size:14px;">
-        <div><div style="color:var(--muted);font-size:12px;">EMAIL</div><div id="pEmail" style="font-weight:600;">—</div></div>
-        <div><div style="color:var(--muted);font-size:12px;">ACCOUNT CREATED</div><div id="pCreated" style="font-weight:600;">—</div></div>
-        <div><div style="color:var(--muted);font-size:12px;">USER ID</div><div id="pId" style="font-weight:600;font-family:monospace;font-size:12px;word-break:break-all;">—</div></div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));gap:20px;font-size:14px;background:var(--bg);padding:16px;border-radius:12px;border:2px solid #eef0f8;">
+        <div>
+          <div style="color:var(--muted);font-size:12px;font-weight:600;text-transform:uppercase;margin-bottom:4px;">Email Address</div>
+          <div id="pEmail" style="font-weight:600;">—</div>
+        </div>
+        <div>
+          <div style="color:var(--muted);font-size:12px;font-weight:600;text-transform:uppercase;margin-bottom:4px;">Account Created</div>
+          <div id="pCreated" style="font-weight:600;">—</div>
+        </div>
+        <div>
+          <div style="color:var(--muted);font-size:12px;font-weight:600;text-transform:uppercase;margin-bottom:4px;">User ID</div>
+          <div id="pId" style="font-weight:600;font-family:monospace;font-size:12px;word-break:break-all;">—</div>
+        </div>
       </div>
     </div>
 
+    <!-- EDIT PROFIL -->
     <div class="panel" id="settings">
       <h3>Edit Profile</h3>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
-        <div><label>Full Name</label><input type="text" id="editFullName"></div>
-        <div><label>Username</label><input type="text" id="editUsername"></div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(250px, 1fr));gap:16px;margin-bottom:16px;">
+        <div>
+          <label>Full Name</label>
+          <input type="text" id="editFullName" placeholder="Your full name">
+        </div>
+        <div>
+          <label>Username</label>
+          <input type="text" id="editUsername" placeholder="Your username">
+        </div>
       </div>
       <button class="btn btn-primary" id="saveProfile">Save Changes</button>
     </div>
 
+    <!-- GANTI PASSWORD -->
     <div class="panel">
       <h3>Change Password</h3>
-      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:16px;">
-        <div><label>Current Password</label><input type="password" id="curPass"></div>
-        <div><label>New Password</label><input type="password" id="newPass" minlength="8"></div>
-        <div><label>Confirm New</label><input type="password" id="newPass2" minlength="8"></div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));gap:16px;margin-bottom:16px;">
+        <div>
+          <label>Current Password</label>
+          <input type="password" id="curPass" placeholder="••••••••">
+        </div>
+        <div>
+          <label>New Password</label>
+          <input type="password" id="newPass" minlength="8" placeholder="Min. 8 characters">
+        </div>
+        <div>
+          <label>Confirm New Password</label>
+          <input type="password" id="newPass2" minlength="8" placeholder="Repeat new password">
+        </div>
       </div>
       <button class="btn btn-blue" id="changePass">Update Password</button>
     </div>
 
+    <!-- KEAMANAN (SESSIONS) -->
     <div class="panel" id="security">
-      <h3>Security</h3>
-      <div id="sessionsList" style="margin-bottom:16px;"></div>
+      <h3>Security & Active Sessions</h3>
+      <div id="sessionsList" style="margin-bottom:20px;font-size:14px;"></div>
       <button class="btn btn-ghost" id="logoutAll">Logout All Sessions</button>
     </div>
 
-    <div class="panel" style="border-color:red;">
-      <h3 style="color:red;">Danger Zone</h3>
-      <p style="color:var(--muted);margin-bottom:12px;">Permanently delete your account and all API keys.</p>
-      <button class="btn" style="background:red;color:white;" id="deleteAccount">Delete My Account</button>
+    <!-- DANGER ZONE -->
+    <div class="panel" style="border-color:#ef4444; background:#fff5f5;">
+      <h3 style="color:#ef4444;">Danger Zone</h3>
+      <p style="color:var(--muted);margin-bottom:16px;font-size:14px;">Permanently delete your account, all API keys, and all associated data. This action cannot be undone.</p>
+      <button class="btn" style="background:#ef4444;color:white;border-color:#ef4444;box-shadow:4px 4px 0 #991b1b;" id="deleteAccount">Delete My Account</button>
     </div>
   </main>
 </div>
+
 <div id="toast-container"></div>
 <script src="js/app.js"></script>
 <script>
-let me = null;
+let currentUser = null;
 
+// =========================================
+// 1. INIT & LOAD DATA
+// =========================================
 async function init() {
-  const r = await fetch('/api/auth/me', { credentials: 'include' });
-  if (!r.ok) return window.location.href = 'login.html';
-  const { user } = await r.json();
-  me = user;
-  document.getElementById('avatarBtn').textContent = (user.full_name || 'U')[0].toUpperCase();
-  document.getElementById('bigAvatar').textContent = (user.full_name || 'U')[0].toUpperCase();
-  document.getElementById('pName').textContent = user.full_name;
-  document.getElementById('pUsername').textContent = '@' + user.username;
-  document.getElementById('pEmail').textContent = user.email;
-  document.getElementById('pCreated').textContent = new Date(user.created_at).toLocaleDateString();
-  document.getElementById('pId').textContent = user.id;
-  document.getElementById('editFullName').value = user.full_name;
-  document.getElementById('editUsername').value = user.username;
-  loadSessions();
+  try {
+    const r = await fetch('/api/auth/me', { credentials: 'include' });
+    if (!r.ok) return window.location.href = 'login.html';
+    
+    const { user } = await r.json();
+    currentUser = user;
+    
+    // Set Data ke UI
+    const initial = (user.full_name || 'U')[0].toUpperCase();
+    document.getElementById('avatarBtn').textContent = initial;
+    document.getElementById('bigAvatar').textContent = initial;
+    document.getElementById('pName').textContent = user.full_name;
+    document.getElementById('pUsername').textContent = '@' + user.username;
+    document.getElementById('pEmail').textContent = user.email;
+    document.getElementById('pCreated').textContent = new Date(user.created_at).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' });
+    document.getElementById('pId').textContent = user.id;
+    
+    // Isi Form
+    document.getElementById('editFullName').value = user.full_name;
+    document.getElementById('editUsername').value = user.username;
+    
+    // Load Sesi Login
+    loadSessions();
+  } catch (err) {
+    window.location.href = 'login.html';
+  }
 }
 
 async function loadSessions() {
   try {
     const { sessions } = await API.request('/api/user/sessions');
-    document.getElementById('sessionsList').innerHTML = sessions.map(s => `
-      <div style="padding:10px 0;border-bottom:1px solid #eee;font-size:13px;">
-        <strong>Session</strong> — created ${new Date(s.created_at).toLocaleString()}
-        <div style="color:var(--muted);font-size:11px;">Expires: ${new Date(s.expires_at).toLocaleString()}</div>
-      </div>`).join('') || '<p style="color:var(--muted);">No sessions</p>';
-  } catch {}
+    const el = document.getElementById('sessionsList');
+    
+    if (!sessions || sessions.length === 0) {
+      el.innerHTML = '<p style="color:var(--muted);">No active sessions found.</p>';
+      return;
+    }
+    
+    el.innerHTML = sessions.map(s => `
+      <div style="padding:12px; border:2px solid #eef0f8; border-radius:10px; margin-bottom:8px;">
+        <div style="font-weight:700; color:var(--blue);">🖥 Active Session</div>
+        <div style="color:var(--muted); font-size:12px; margin-top:4px;">
+          Started: ${new Date(s.created_at).toLocaleString('id-ID')}<br>
+          Expires: ${new Date(s.expires_at).toLocaleString('id-ID')}
+        </div>
+      </div>
+    `).join('');
+  } catch (e) { console.error(e); }
 }
 
+// =========================================
+// 2. AKSI: EDIT PROFILE
+// =========================================
 document.getElementById('saveProfile')?.addEventListener('click', async () => {
+  const btn = document.getElementById('saveProfile');
+  btn.disabled = true; btn.textContent = 'Saving...';
+  
   try {
     await API.request('/api/user/profile', {
       method: 'PUT',
       body: JSON.stringify({
         full_name: document.getElementById('editFullName').value.trim(),
-        username: document.getElementById('editUsername').value.trim(),
+        username: document.getElementById('editUsername').value.trim()
       }),
     });
-    showToast('Profile updated', 'success');
-    setTimeout(() => location.reload(), 600);
-  } catch (e) { showToast(e.detail || 'Failed', 'error'); }
+    showToast('Profile updated successfully', 'success');
+    setTimeout(() => location.reload(), 1000); // Reload untuk update nama di sidebar/avatar
+  } catch (err) {
+    showToast(err.detail || 'Failed to update profile', 'error');
+    btn.disabled = false; btn.textContent = 'Save Changes';
+  }
 });
 
+// =========================================
+// 3. AKSI: GANTI PASSWORD
+// =========================================
 document.getElementById('changePass')?.addEventListener('click', async () => {
-  const a = document.getElementById('newPass').value;
-  const b = document.getElementById('newPass2').value;
-  if (a !== b) return showToast('Passwords do not match', 'error');
+  const curPass = document.getElementById('curPass').value;
+  const newPass = document.getElementById('newPass').value;
+  const newPass2 = document.getElementById('newPass2').value;
+  
+  if (!curPass || !newPass) return showToast('Please fill all password fields', 'error');
+  if (newPass !== newPass2) return showToast('New passwords do not match', 'error');
+  if (newPass.length < 8) return showToast('Password must be at least 8 characters', 'error');
+
+  const btn = document.getElementById('changePass');
+  btn.disabled = true; btn.textContent = 'Updating...';
+  
   try {
     await API.request('/api/user/password', {
       method: 'PUT',
-      body: JSON.stringify({ current_password: document.getElementById('curPass').value, new_password: a }),
+      body: JSON.stringify({ current_password: curPass, new_password: newPass }),
     });
-    showToast('Password updated', 'success');
-    ['curPass', 'newPass', 'newPass2'].forEach(id => document.getElementById(id).value = '');
-  } catch (e) { showToast(e.detail || 'Failed', 'error'); }
+    showToast('Password updated successfully', 'success');
+    document.getElementById('curPass').value = '';
+    document.getElementById('newPass').value = '';
+    document.getElementById('newPass2').value = '';
+  } catch (err) {
+    showToast(err.detail || 'Failed to update password', 'error');
+  } finally {
+    btn.disabled = false; btn.textContent = 'Update Password';
+  }
 });
 
+// =========================================
+// 4. AKSI: LOGOUT SEMUA SESI
+// =========================================
 document.getElementById('logoutAll')?.addEventListener('click', async () => {
-  if (!confirm('Log out ALL sessions? You will be redirected to login.')) return;
+  if (!confirm('This will log you out from ALL devices. Continue?')) return;
   try {
     await API.request('/api/user/sessions/logout-all', { method: 'POST' });
     window.location.href = 'login.html';
-  } catch (e) { showToast(e.detail || 'Failed', 'error'); }
+  } catch (err) {
+    showToast(err.detail || 'Failed to logout all sessions', 'error');
+  }
 });
 
+// =========================================
+// 5. AKSI: HAPUS AKUN
+// =========================================
 document.getElementById('deleteAccount')?.addEventListener('click', async () => {
-  if (!confirm('DELETE account? This cannot be undone. All API keys will be revoked.')) return;
+  const konfirmasi = prompt('Type "DELETE" to permanently delete your account and all API keys:');
+  if (konfirmasi !== 'DELETE') return showToast('Account deletion cancelled', 'error');
+  
   try {
     await API.request('/api/user/account', { method: 'DELETE' });
-    window.location.href = 'login.html';
-  } catch (e) { showToast(e.detail || 'Failed', 'error'); }
+    showToast('Account deleted. Goodbye!', 'success');
+    setTimeout(() => window.location.href = 'login.html', 1500);
+  } catch (err) {
+    showToast(err.detail || 'Failed to delete account', 'error');
+  }
 });
 
-document.getElementById('sidebarToggle')?.addEventListener('click', () => document.getElementById('sidebar').classList.toggle('open'));
-document.getElementById('profileMenu')?.addEventListener('click', (e) => e.currentTarget.classList.toggle('open'));
-document.getElementById('logoutLink')?.addEventListener('click', async (e) => {
-  e.preventDefault();
-  await API.request('/api/auth/logout', { method: 'POST' });
-  window.location.href = 'login.html';
-});
-document.getElementById('logoutDropdown')?.addEventListener('click', async (e) => {
-  e.preventDefault();
-  await API.request('/api/auth/logout', { method: 'POST' });
-  window.location.href = 'login.html';
-});
-document.querySelectorAll('[data-scroll]').forEach(a => {
-  a.addEventListener('click', (e) => {
-    e.preventDefault();
-    document.getElementById(a.dataset.scroll)?.scrollIntoView({ behavior: 'smooth' });
+// =========================================
+// 6. UI LOGIC (SIDEBAR, DROPDOWN, LOGOUT)
+// =========================================
+const sidebar = document.getElementById('sidebar');
+const sidebarToggle = document.getElementById('sidebarToggle');
+const sidebarOverlay = document.getElementById('sidebarOverlay');
+
+if (sidebarToggle && sidebar && sidebarOverlay) {
+  sidebarToggle.addEventListener('click', () => {
+    sidebar.classList.add('open');
+    sidebarOverlay.classList.add('open');
   });
-});
+  sidebarOverlay.addEventListener('click', () => {
+    sidebar.classList.remove('open');
+    sidebarOverlay.classList.remove('open');
+  });
+}
 
+const profileMenu = document.getElementById('profileMenu');
+if (profileMenu) {
+  profileMenu.addEventListener('click', (e) => {
+    if (e.target.tagName !== 'A') profileMenu.classList.toggle('open');
+  });
+  document.addEventListener('click', (e) => {
+    if (!profileMenu.contains(e.target)) profileMenu.classList.remove('open');
+  });
+}
+
+const handleLogout = async (e) => {
+  e.preventDefault();
+  try { await API.request('/api/auth/logout', { method: 'POST' }); } 
+  catch (err) { console.error(err); } 
+  finally { window.location.href = 'login.html'; }
+};
+document.getElementById('logoutLink')?.addEventListener('click', handleLogout);
+document.getElementById('logoutDropdown')?.addEventListener('click', handleLogout);
+
+// Jalankan aplikasi
 init();
 </script>
 </body>
